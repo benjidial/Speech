@@ -1,5 +1,5 @@
 ## Description
-Speech is a game wherein the player can have conversations with AI who also have conversations with each other.  When you talk to people, you can ask them questions or tell them things.  Some built in examples are "Are you ____?", "Who are you?" and "I am ____."
+Speech is a game wherein the player can have conversations with AI who also have conversations with each other.  When you talk to people, you can ask them questions or tell them things.  Some built in examples are "Are you ____?", "Who are you?", "I am ____.", "Do you like ____?", "I like ____." and "I don't like ____.".
 ## Customization
 The file `names.cfg` next to the executable contains a name on each line.  
 The file `facts.cfg` is arranged in groups of nine lines.  Each group is composed of  
