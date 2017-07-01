@@ -74,7 +74,9 @@ namespace Benji.Speech
     {
       if (conversation != null)
       {
-        string s = conversation == player ? Program.sayings.Dequeue() : conversation.Listen();
+        string s;
+        try { s = conversation == player ? Program.sayings.Dequeue() : conversation.Listen(); }
+        catch (InvalidOperationException) { s = null; }
         if (s != null)
         {
           foreach (Fact fact in Fact.facts)
@@ -239,8 +241,7 @@ namespace Benji.Speech
 
     public string Listen( )
     {
-      try { return sayings.Dequeue(); }
-      catch (InvalidOperationException) { return null; }
+      return sayings.Dequeue();
     }
   }
 
