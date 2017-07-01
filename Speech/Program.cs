@@ -282,7 +282,8 @@ namespace Benji.Speech
           break;
         case ConsoleKey.L:
           string n = Console.ReadLine();
-          Console.WriteLine(people[n == "" ? prng.Next(people.Count - 1) + 1 : names.IndexOf(n)].Listen() ?? "");
+          try { Console.WriteLine(people[n == "" ? prng.Next(people.Count - 1) + 1 : names.IndexOf(n)].Listen()); }
+          catch (InvalidOperationException) { }
           break;
         case ConsoleKey.Q:
           return 0;
