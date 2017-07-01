@@ -257,6 +257,7 @@ namespace Benji.Speech
     static int Main( )
     {
       people.Add(Person.player);
+      names.Add(null);
       Console.WriteLine("Talk: T\nListen: L\nQuit: Q\nWait: Any");
       while (true)
       {
@@ -271,6 +272,7 @@ namespace Benji.Speech
           int i = prng.Next(people.Count - 1) + 1;
           Console.WriteLine("{0} walked out.", names[i] ?? "Someone");
           people.RemoveAt(i);
+          names.RemoveAt(i);
         }
         foreach (Person person in people)
           person.Step();
