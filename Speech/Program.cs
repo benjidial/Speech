@@ -44,7 +44,7 @@ namespace Benji.Speech
     private Dictionary<Tuple<Person, Fact>, bool> factKnowledge = new Dictionary<Tuple<Person, Fact>, bool>();
     private Person conversation = null;
     private static Person player;
-    private Queue<string> sayings;
+    private Queue<string> sayings = new Queue<string>();
 
     public Person( )
     {
@@ -250,10 +250,10 @@ namespace Benji.Speech
   {
     public static Random prng = new Random();
 
-    public static List<Person> people;
-    private static List<string> names;
+    public static List<Person> people = new List<Person>();
+    private static List<string> names = new List<string>();
 
-    public static Queue<string> sayings;
+    public static Queue<string> sayings = new Queue<string>();
 
     static int Main( )
     {
