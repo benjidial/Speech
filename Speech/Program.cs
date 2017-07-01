@@ -265,9 +265,9 @@ namespace Benji.Speech
           names.Add(null);
           Console.WriteLine("Someone walked in.");
         }
-        while (prng.NextDouble() < 0.1 && people.Count != 0)
+        while (prng.NextDouble() < 0.1 && people.Count != 1)
         {
-          int i = prng.Next(people.Count);
+          int i = prng.Next(people.Count - 1) + 1;
           Console.WriteLine("{0} walked out.", names[i] ?? "Someone");
           people.RemoveAt(i);
         }
