@@ -43,7 +43,7 @@ namespace Benji.Speech
     private Dictionary<string, Person> nameKnowledgeReverse = new Dictionary<string, Person>();
     private Dictionary<Tuple<Person, Fact>, bool> factKnowledge = new Dictionary<Tuple<Person, Fact>, bool>();
     private Person conversation = null;
-    private static Person player;
+    public static Person player;
     private Queue<string> sayings = new Queue<string>();
 
     public Person( )
@@ -54,7 +54,10 @@ namespace Benji.Speech
         facts.Add(Fact.facts[Program.prng.Next(Fact.facts.Count)]);
       while (Program.prng.NextDouble() > 0.3);
       foreach (Person p in Program.people)
+      {
         personOpinions.Add(p, 1.0);
+        p.personOpinions.Add(this, 1.0);
+      }
       foreach (Fact f in Fact.facts)
         factOpinions.Add(f, facts.Contains(f) ? 2 : 1);
     }
@@ -65,11 +68,6 @@ namespace Benji.Speech
     {
       names = new List<string>(File.ReadLines("names.cfg"));
       player = new Person(false);
-    }
-
-    public void Notify(Person p)
-    {
-      personOpinions.Add(p, 1.0);
     }
 
     public void Step( )
@@ -257,15 +255,13 @@ namespace Benji.Speech
 
     static int Main( )
     {
+      people.Add(Person.player);
       Console.WriteLine("Talk: T\nListen: L\nQuit: Q\nWait: Any");
       while (true)
       {
         while (prng.NextDouble() < 0.1)
         {
-          Person p = new Person();
-          foreach (Person e in people)
-            e.Notify(p);
-          people.Add(p);
+          people.Add(new Person());
           names.Add(null);
           Console.WriteLine("Someone walked in.");
         }
@@ -285,7 +281,7 @@ namespace Benji.Speech
           break;
         case ConsoleKey.L:
           string n = Console.ReadLine();
-          Console.WriteLine(people[n == "" ? prng.Next(people.Count) : names.IndexOf(n)].Listen() ?? "");
+          Console.WriteLine(people[n == "" ? prng.Next(people.Count - 1) + 1 : names.IndexOf(n)].Listen() ?? "");
           break;
         case ConsoleKey.Q:
           return 0;
