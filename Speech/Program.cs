@@ -274,8 +274,8 @@ namespace Benji.Speech
           people.RemoveAt(i);
           names.RemoveAt(i);
         }
-        foreach (Person person in people)
-          person.Step();
+        for (int i = 1, c = people.Count; i < c; i++)
+          people[i].Step();
 
         switch (Console.ReadKey(true).Key)
         {
