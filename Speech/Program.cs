@@ -79,6 +79,9 @@ namespace Benji.Speech
         catch (InvalidOperationException) { s = null; }
         if (s != null)
         {
+#if DEBUG
+          Console.WriteLine(conversation.name + " said \"" + s + "\" to " + name + ".");
+#endif
           foreach (Fact fact in Fact.facts)
             if (s == fact.tellFirst)
             {
