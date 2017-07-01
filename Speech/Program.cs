@@ -77,7 +77,27 @@ namespace Benji.Speech
         string s;
         try { s = conversation == player ? Program.sayings.Dequeue() : conversation.Listen(); }
         catch (InvalidOperationException) { s = null; }
-        if (s != null)
+        if (s == null)
+          switch (Program.prng.Next(5))
+          {
+          case 0:
+            sayings.Enqueue(facts[Program.prng.Next(facts.Count)].tellFirst);
+            break;
+          case 1:
+            sayings.Enqueue(facts[Program.prng.Next(facts.Count)].askSecond);
+            break;
+          case 2:
+            Tuple<Person, Fact> otherFact = new List<Tuple<Person, Fact>>(factKnowledge.Keys)[Program.prng.Next(factKnowledge.Count)];
+            sayings.Enqueue(factKnowledge[otherFact] ? otherFact.Item2.tellThirdStart + nameKnowledge[otherFact.Item1] + otherFact.Item2.tellThirdEnd : otherFact.Item2.tellThirdStartNegative + nameKnowledge[otherFact.Item1] + otherFact.Item2.tellThirdEndNegative);
+            break;
+          case 3:
+            sayings.Enqueue(facts[Program.prng.Next(facts.Count)].askSecond);
+            break;
+          case 4:
+            sayings.Enqueue("Who are you?");
+            break;
+          }
+        else
         {
 #if DEBUG
           Console.WriteLine(conversation.name + " said \"" + s + "\" to " + name + ".");
