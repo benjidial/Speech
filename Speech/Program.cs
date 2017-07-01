@@ -172,6 +172,64 @@ namespace Benji.Speech
           }
           else if (s == "Who are you?")
             sayings.Enqueue("I am " + name + ".");
+          else if (s.StartsWith("Do you like ") && s.EndsWith("?"))
+          {
+            string n = s.Substring(12, s.Length - 13);
+            if (nameKnowledge.ContainsValue(n))
+            {
+              Person p = nameKnowledgeReverse[n];
+              sayings.Enqueue((personOpinions[p] < 1 ? "I do not like " : personOpinions[p] > 1 ? "I like " : "I am neutral about ") + n + ".");
+            }
+            else
+              sayings.Enqueue("I don't know " + n + ".");
+          }
+          else if (s.StartsWith("I like ") && s.EndsWith("."))
+          {
+            string n = s.Substring(7, s.Length - 8);
+            if (nameKnowledge.ContainsValue(n))
+            {
+              Person p = nameKnowledgeReverse[n];
+              if (personOpinions[p] > 1)
+                personOpinions[conversation] *= 2;
+              else if (personOpinions[p] < 1)
+                personOpinions[conversation] /= 2;
+              else if (personOpinions[conversation] > 1)
+                personOpinions[p] *= 2;
+              sayings.Enqueue((personOpinions[p] < 1 ? "I do not like " : personOpinions[p] > 1 ? "I like " : "I am neutral about ") + n + ".");
+            }
+            else
+              sayings.Enqueue("I don't know " + n + ".");
+          }
+          else if (s.StartsWith("I don't like") && s.EndsWith("."))
+          {
+            string n = s.Substring(13, s.Length - 14);
+            if (nameKnowledge.ContainsValue(n))
+            {
+              Person p = nameKnowledgeReverse[n];
+              if (personOpinions[p] > 1)
+                personOpinions[conversation] /= 2;
+              else if (personOpinions[p] < 1)
+                personOpinions[conversation] *= 2;
+              else if (personOpinions[conversation] > 1)
+                personOpinions[p] /= 2;
+              sayings.Enqueue((personOpinions[p] < 1 ? "I do not like " : personOpinions[p] > 1 ? "I like " : "I am neutral about ") + n + ".");
+            }
+            else
+              sayings.Enqueue("I don't know " + n + ".");
+          }
+          else if (s.StartsWith("I am neutral about ") && s.EndsWith("."))
+          {
+            string n = s.Substring(13, s.Length - 14);
+            if (nameKnowledge.ContainsValue(n))
+            {
+              Person p = nameKnowledgeReverse[n];
+              sayings.Enqueue((personOpinions[p] < 1 ? "I do not like " : personOpinions[p] > 1 ? "I like " : "I am neutral about ") + n + ".");
+            }
+            else
+              sayings.Enqueue("I don't know " + n + ".");
+          }
+          else if (s.StartsWith("I don't know ") && s.EndsWith("."))
+            sayings.Enqueue(facts[Program.prng.Next(facts.Count)].askSecond);
         }
       newConversation:
         if (Program.prng.NextDouble() < 0.075)
