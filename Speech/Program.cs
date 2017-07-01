@@ -235,7 +235,7 @@ namespace Benji.Speech
         if (Program.prng.NextDouble() < 0.075)
           conversation = null;
       }
-      if (conversation == null && Program.prng.NextDouble() > 0.075)
+      if (conversation == null && Program.prng.NextDouble() > 0.75)
         conversation = Program.people[Program.prng.Next(Program.people.Count)];
     }
 
