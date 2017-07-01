@@ -24,7 +24,7 @@ namespace Benji.Speech
         askThirdEnd = aTE;
       }
 
-      private static Fact( )
+      static Fact( )
       {
         StreamReader r = File.OpenText("facts.cfg");
         facts = new List<Fact>();
@@ -61,7 +61,7 @@ namespace Benji.Speech
 
     private Person(bool b) { }
 
-    private static Person( )
+    static Person( )
     {
       names = new List<string>(File.ReadLines("names.cfg"));
       player = new Person(false);
