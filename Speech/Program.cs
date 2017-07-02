@@ -87,8 +87,12 @@ namespace Benji.Speech
             sayings.Enqueue(facts[Program.prng.Next(facts.Count)].askSecond);
             break;
           case 2:
-            Tuple<Person, Fact> otherFact = new List<Tuple<Person, Fact>>(factKnowledge.Keys)[Program.prng.Next(factKnowledge.Count)];
-            sayings.Enqueue(factKnowledge[otherFact] ? otherFact.Item2.tellThirdStart + nameKnowledge[otherFact.Item1] + otherFact.Item2.tellThirdEnd : otherFact.Item2.tellThirdStartNegative + nameKnowledge[otherFact.Item1] + otherFact.Item2.tellThirdEndNegative);
+            if (factKnowledge.Count != 0)
+            {
+              Tuple<Person, Fact> otherFact = new List<Tuple<Person, Fact>>(factKnowledge.Keys)[Program.prng.Next(factKnowledge.Count)];
+              if (nameKnowledge.ContainsKey(otherFact.Item1))
+                sayings.Enqueue(factKnowledge[otherFact] ? otherFact.Item2.tellThirdStart + nameKnowledge[otherFact.Item1] + otherFact.Item2.tellThirdEnd : otherFact.Item2.tellThirdStartNegative + nameKnowledge[otherFact.Item1] + otherFact.Item2.tellThirdEndNegative);
+            }
             break;
           case 3:
             sayings.Enqueue(facts[Program.prng.Next(facts.Count)].askSecond);
@@ -105,7 +109,7 @@ namespace Benji.Speech
           foreach (Fact fact in Fact.facts)
             if (s == fact.tellFirst)
             {
-              factKnowledge.Add(new Tuple<Person, Fact>(conversation, fact), true);
+              factKnowledge[new Tuple<Person, Fact>(conversation, fact)] = true;
               if (factOpinions[fact] < 1)
                 personOpinions[conversation] /= 2;
               else if (factOpinions[fact] > 1)
@@ -119,7 +123,7 @@ namespace Benji.Speech
             }
             else if (s == fact.tellFirstNegative)
             {
-              factKnowledge.Add(new Tuple<Person, Fact>(conversation, fact), false);
+              factKnowledge[new Tuple<Person, Fact>(conversation, fact)] = false;
               if (factOpinions[fact] > 1)
                 personOpinions[conversation] /= 2;
               if (personOpinions[conversation] > 1)
@@ -133,7 +137,7 @@ namespace Benji.Speech
               if (nameKnowledge.ContainsValue(n))
               {
                 Person p = nameKnowledgeReverse[n];
-                factKnowledge.Add(new Tuple<Person, Fact>(p, fact), true);
+                factKnowledge[new Tuple<Person, Fact>(p, fact)] = true;
                 if (factOpinions[fact] < 1)
                   personOpinions[p] /= 2;
                 else if (factOpinions[fact] > 1)
@@ -155,7 +159,7 @@ namespace Benji.Speech
               if (nameKnowledge.ContainsValue(n))
               {
                 Person p = nameKnowledgeReverse[n];
-                factKnowledge.Add(new Tuple<Person, Fact>(p, fact), false);
+                factKnowledge[new Tuple<Person, Fact>(p, fact)] = false;
                 if (factOpinions[fact] > 1)
                   personOpinions[p] /= 2;
                 if (personOpinions[p] > 1)
@@ -189,8 +193,8 @@ namespace Benji.Speech
           else if (s.StartsWith("I am ") && s.EndsWith("."))
           {
             string n = s.Substring(5, s.Length - 6);
-            nameKnowledge.Add(conversation, n);
-            nameKnowledgeReverse.Add(n, conversation);
+            nameKnowledge[conversation] = n;
+            nameKnowledgeReverse[n] = conversation;
             sayings.Enqueue(Program.prng.Next(2) == 0 ? "I am " + name + "." : facts[Program.prng.Next(facts.Count)].askSecond);
           }
           else if (s == "Who are you?")
@@ -253,6 +257,8 @@ namespace Benji.Speech
           }
           else if (s.StartsWith("I don't know ") && s.EndsWith("."))
             sayings.Enqueue(facts[Program.prng.Next(facts.Count)].askSecond);
+          else if (s == "Do you like me?")
+            sayings.Enqueue(personOpinions[conversation] < 1 ? "I do not like you." : personOpinions[conversation] > 1 ? "I like you." : "I am neutral about you.");
         }
       newConversation:
         if (Program.prng.NextDouble() < 0.075)
